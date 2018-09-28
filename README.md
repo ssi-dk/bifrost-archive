@@ -1,8 +1,8 @@
 ## Running bifrost:
 
-Activate conda environment. `env_qcquickie` is the name of the environment in the SSI servers:
+Activate conda environment. `bifrost` is the name of the environment in the SSI servers:
 ```
-source activate env_qcquickie
+source activate bifrost
 ```
 
 Create output directory, and move into it 
@@ -24,7 +24,7 @@ cp -r path/to/this/repo code
 
 Run snakemake to generate the run command and the folder structures.
 
-Set the components you want to run (component names are the filenames in /components dir), default is `qcquickie,assemblatron,analyzer`.
+Set the components you want to run (component names are the filenames in /components dir), default is `whats_my_species,qcquickie,assemblatron,analyzer,testomatic`.
 
 Use `use_mongodb=False` in config if you don't want to store the run, samples and results in the database.
 For now however, you need to use the database to access the species table to run mlst.
