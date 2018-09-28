@@ -1,0 +1,11 @@
+name: python_packages
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python
+  - pandas
+  - cyvcf2
+  - ruamel.yaml
+  - biopython
+  - xlrd
