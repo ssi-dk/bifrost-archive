@@ -3,8 +3,11 @@
 ### Requirements
 
 Python >=3.7
+
 anaconda/miniconda >=4.3
+
 MongoDB >=4.0.0
+
 pip >= 9.0
 
 ### Setting up MongoDB
