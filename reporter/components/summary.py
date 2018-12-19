@@ -1,5 +1,8 @@
 import dash_html_components as html
 import dash_core_components as dcc
+import dash_table
+import components.import_data as import_data
+
 
 from components.global_vars import PLOTS, DEFAULT_PLOT
 
@@ -11,6 +14,18 @@ def format_selected_samples(filtered_df):
 def html_div_summary():
     plot_values_options = [{"label": plot, "value": plot}
                            for plot, value in PLOTS.items()]
+    qc_options = ["OK", "core facility", "supplying lab", "skipped", "Not checked"]
+    qc_list_options = [{"label":o, "value":o} for o in qc_options]
+    
+
+    run_list = list(import_data.get_run_list())
+    run_list_options = [
+        {
+            "label": "{} ({})".format(run["name"],
+                                        len(run["samples"])),
+            "value": run["name"]
+        } for run in run_list]
+
     return html.Div(
         [
             html.H5("Summary", className="box-title"),
@@ -19,6 +34,30 @@ def html_div_summary():
                     html.Div(
                         [
                             html.Div(
+                                [
+                                    html.Div(
+                                        [
+                                            html.Div(
+                                                dcc.Dropdown(
+                                                    id="run-list",
+                                                    options=run_list_options,
+                                                    placeholder="Sequencing run"
+                                                )
+                                            )
+                                        ],
+                                        className="nine columns"
+                                    ),
+                                    html.Div(
+                                        [
+                                            dcc.Link(
+                                                "Go to run",
+                                                id="run-link",
+                                                href="/",
+                                                className="button button-primary")
+                                        ],
+                                        className="three columns"
+                                    )
+                                ],
                                 id="run-selector",
                                 className="row"
                             ),
@@ -97,12 +136,32 @@ def html_div_summary():
                                 [
                                     html.Div(
                                         [
-                                            html.Label("Plot value",
-                                                       htmlFor="plot-list"),
-                                            dcc.Dropdown(
-                                                id="plot-list",
-                                                options=plot_values_options,
-                                                value=DEFAULT_PLOT
+                                            html.Label(
+                                                [
+                                                    "Passed ssi_stamper ",
+                                                    html.Small(
+                                                        [
+                                                            "(",
+                                                            html.A(
+                                                                "all",
+                                                                href="#",
+                                                                n_clicks=0,
+                                                                id="qc-all"
+                                                            ),
+                                                            ")"
+                                                        ]
+                                                    )
+                                                ],
+                                                htmlFor="qc-list"
+                                            ),
+                                            html.Div(
+                                                dcc.Dropdown(
+                                                    id="qc-list",
+                                                    multi=True,
+                                                    options=qc_list_options,
+                                                    value=qc_options
+                                                ),
+                                                id="qc-div"
                                             )
                                         ],
                                         className="twelve columns"
@@ -111,7 +170,24 @@ def html_div_summary():
                                 className="row"
                             )
                         ],
-                        className="eight columns"
+                        className="twelve columns"
+                    )
+                ], className="row"),
+                html.Div([
+                    html.Div(
+                        [
+                            html.Div(
+                                html.Button(
+                                    "Apply Filter",
+                                    id="apply-filter-button",
+                                    n_clicks=0,
+                                    n_clicks_timestamp=0,
+                                    className="button-primary u-full-width"
+                                ), id="applybutton-div"
+                            )
+                            
+                        ],
+                        className="twelve columns"
                     ),
                     html.Div(
                         [
@@ -132,10 +208,38 @@ def html_div_summary():
                                      style={"display": "none"},
                                      id="selected-samples-ids")
                         ],
-                        className="four columns",
+                        style={"display": "none"},
+                        #className="four columns",
                         id="selected-samples"
                     ),
                     
+                ],
+                className="row mt-1"
+            ),
+            html.Div([
+                    html.H6('No samples loaded. Click "Apply Filter" to load samples.'),
+                    html.Div([
+                        html.P(
+                            'To filter on a string type eq, space and exact text in double quotes: eq "FBI"'),
+                        html.P(
+                            'To filter on a number type eq, < or >, space and num(<number here>): > num(500)')
+                    ]),
+                    html.Div(dash_table.DataTable(id="datatable-ssi_stamper", data=[{}]), style={"display": "none"})
+                ],
+                     id="ssi_stamper-report", className="bigtable"),
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.Label("Plot species",
+                                       htmlFor="plot-species"),
+                            html.Div(dcc.Dropdown(
+                                id="plot-species"
+                            ),id="plot-species-div")
+                            
+                        ],
+                        className="twelve columns"
+                    )
                 ],
                 className="row"
             ),

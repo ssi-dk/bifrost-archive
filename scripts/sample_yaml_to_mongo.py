@@ -2,7 +2,7 @@
 
 import pymongo
 import os
-import datahandling
+from bifrostlib import datahandling
 import mongo_interface
 
 

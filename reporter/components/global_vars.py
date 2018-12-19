@@ -1,87 +1,8 @@
 import collections
 import math
 
-columns = ["name", "supplying_lab", "run_name", "_id",
-            "input_read_status", "emails", "user",
-            "R1_location", "R2_location",
-            "provided_species",
-            "qcquickie.name_classified_species_1",
-            "qcquickie.percent_classified_species_1",
-            "qcquickie.name_classified_species_2",
-            "qcquickie.percent_classified_species_2",
-            "qcquickie.percent_unclassified",
-            "qcquickie.bin_length_at_1x",
-            "qcquickie.bin_length_at_10x",
-            "qcquickie.bin_length_at_25x",
-            "qcquickie.bin_length_1x_25x_diff",
-            "qcquickie.bin_coverage_at_1x",
-            "qcquickie.bin_coverage_at_10x",
-            "qcquickie.bin_coverage_at_25x",
-            "qcquickie.bin_contigs_at_1x",
-            "qcquickie.bin_contigs_at_10x",
-            "qcquickie.N50",
-            "qcquickie.snp_filter_deletions",
-            "qcquickie.snp_filter_indels",
-            "qcquickie.snp_filter_10x_10%",
-            "assemblatron.bin_length_at_1x",
-            "assemblatron.bin_length_at_10x",
-            "assemblatron.bin_length_at_25x",
-            "assemblatron.bin_length_1x_25x_diff",
-            "assemblatron.bin_coverage_at_1x",
-            "assemblatron.bin_coverage_at_10x",
-            "assemblatron.bin_coverage_at_25x",
-            "assemblatron.bin_contigs_at_1x",
-            "assemblatron.bin_contigs_at_10x",
-            "assemblatron.N50",
-            "assemblatron.snp_filter_deletions",
-            "assemblatron.snp_filter_indels",
-            "assemblatron.snp_filter_10x_10%", "comments"]
-
-
 PLOTS = collections.OrderedDict()
 
-PLOTS["qcquickie.bin_length_at_1x"] = {
-    "projection": "qcquickie.bin_length_at_1x"
-}
-PLOTS["qcquickie.bin_length_at_10x"] = {
-    "projection": "qcquickie.bin_length_at_10x"
-}
-PLOTS["qcquickie.bin_length_at_25x"] = {
-    "projection": "qcquickie.bin_length_at_25x"
-}
-
-def qcquickie_diff(res):
-    if "qcquickie.bin_length_at_1x" in res and "qcquickie.bin_length_at_25x" in res:
-        res["qcquickie.bin_length_1x_25x_diff"] = res["qcquickie.bin_length_at_1x"] - \
-            res["qcquickie.bin_length_at_25x"]
-    return res
-
-
-PLOTS["qcquickie.bin_coverage_at_1x"] = {
-    "projection": "qcquickie.bin_coverage_at_1x"
-}
-PLOTS["qcquickie.bin_coverage_at_10x"] = {
-    "projection": "qcquickie.bin_coverage_at_10x"
-}
-PLOTS["qcquickie.bin_coverage_at_25x"] = {
-    "projection": "qcquickie.bin_coverage_at_25x"
-}
-PLOTS["qcquickie.bin_length_1x_25x_diff"] = {
-    "projection": "qcquickie.bin_length_1x_25x_diff",
-        "func": qcquickie_diff
-    }
-PLOTS["qcquickie.bin_contigs_at_1x"] = {
-    "projection": "qcquickie.bin_contigs_at_1x"
-}
-PLOTS["qcquickie.bin_contigs_at_10x"] = {
-    "projection": "qcquickie.bin_contigs_at_10x"
-}
-PLOTS["qcquickie.bin_contigs_at_25x"] = {
-    "projection": "qcquickie.bin_contigs_at_25x"
-}
-PLOTS["qcquickie.N50"] = {
-    "projection": "qcquickie.N50"
-}
 PLOTS["assemblatron.bin_length_at_1x"] = {
     "projection": "assemblatron.bin_length_at_1x"
 }
@@ -92,13 +13,17 @@ PLOTS["assemblatron.bin_length_at_25x"] = {
     "projection": "assemblatron.bin_length_at_25x"
 }
 def assemblatron_diff(res):
-    if "assemblatron.bin_length_at_1x" in res and "assemblatron.bin_length_at_25x" in res:
-        res["assemblatron.bin_length_1x_25x_diff"] = res["assemblatron.bin_length_at_1x"] - \
-            res["assemblatron.bin_length_at_25x"]
+    if "assemblatron.bin_length_at_1x" in res and "assemblatron.bin_length_at_10x" in res:
+        res["assemblatron.bin_length_1x_10x_diff"] = res["assemblatron.bin_length_at_1x"] - \
+            res["assemblatron.bin_length_at_10x"]
     else:
-        res["assemblatron.bin_length_1x_25x_diff"] = math.nan
+        res["assemblatron.bin_length_1x_10x_diff"] = math.nan
     return res
 
+PLOTS["assemblatron.bin_length_1x_10x_diff"] = {
+    "projection": "assemblatron.bin_length_1x_10x_diff",
+        "func": assemblatron_diff
+    }
 
 PLOTS["assemblatron.bin_coverage_at_1x"] = {
     "projection": "assemblatron.bin_coverage_at_1x"
@@ -115,11 +40,154 @@ PLOTS["assemblatron.bin_contigs_at_1x"] = {
 PLOTS["assemblatron.bin_contigs_at_10x"] = {
     "projection": "assemblatron.bin_contigs_at_10x"
 }
+
+def assemblatron_contig_diff(res):
+    if "assemblatron.bin_contigs_at_1x" in res and "assemblatron.bin_contigs_at_10x" in res:
+        res["assemblatron.bin_contigs_1x_10x_diff"] = res["assemblatron.bin_contigs_at_1x"] - \
+            res["assemblatron.bin_contigs_at_10x"]
+    else:
+        res["assemblatron.bin_contigs_1x_10x_diff"] = math.nan
+    return res
+
+
+PLOTS["assemblatron.bin_contigs_1x_10x_diff"] = {
+    "projection": "assemblatron.bin_contigs_1x_10x_diff",
+    "func": assemblatron_contig_diff
+}
+
 PLOTS["assemblatron.bin_contigs_at_25x"] = {
     "projection": "assemblatron.bin_contigs_at_25x"
 }
 PLOTS["assemblatron.N50"] = {
-    "projection": "assembly.N50"
+    "projection": "assemblatron.N50"
 }
 
-DEFAULT_PLOT = "qcquickie.bin_length_at_1x"
+DEFAULT_PLOT = "assemblatron.bin_length_at_1x"
+
+
+FUNCS = [assemblatron_diff, assemblatron_contig_diff]
+
+
+COLUMNS = [
+    {
+        "name": "Name",
+        "id": "name"
+    },
+    {
+        "name": "QC_action",
+        "id": "ssi_stamper.assemblatron:action"
+    },
+    {
+        "name": "Comments",
+        "id": "sample_sheet.Comments"
+    },
+    {
+        "name": "Supplying_lab",
+        "id": "sample_sheet.group"
+    },
+    {
+        "name": "Provided_Species",
+        "id": "properties.provided_species"
+    },
+    {
+        "name": "Detected Species",
+        "id": "properties.detected_species"
+    },
+    {
+        "name": "Genome_size_1x",
+        "id": "assemblatron.bin_length_at_1x"
+    },
+    {
+        "name": "Genome_size_10x",
+        "id": "assemblatron.bin_length_at_10x"
+    },
+    {
+        "name": "G_size_difference_1x_10",
+        "id": "ssi_stamper.assemblatron:1x10xsizediff_text"
+    },
+    {
+        "name": "Avg_coverage",
+        "id": "assemblatron.bin_coverage_at_1x"
+    },
+    {
+        "name": "Num_contigs",
+        "id": "assemblatron.bin_contigs_at_1x"
+    },
+    {
+        "name": "Ambiguous_sites",
+        "id": "assemblatron.snp_filter_10x_10%"
+    },
+    {
+        "name": "Num_reads",
+        "id": "assemblatron.filtered_reads_num"
+    },
+    {
+        "name": "mlst_type",
+        "id": "analyzer_mlst_type"
+    },
+    {
+        "name": "mlst_alleles",
+        "id": "analyzer_mlst_alleles"
+    },
+    {
+        "name": "Main_species_plus_undetermined_read_percent",
+        "id": "ssi_stamper.whats_my_species:minspecies_text"
+    },
+    {
+        "name": "Unclassified_reads",
+        "id": "whats_my_species.percent_unclassified"
+    },
+    {
+        "name": "DB_ID",
+        "id": "_id"
+    },
+    {
+        "name": "Failed_tests",
+        "id": "ssi_stamper_failed_tests"
+    }
+
+]
+
+plot_values = [
+    {
+        "name": "Genome_size_1x",
+        "id": "assemblatron.bin_length_at_1x",
+        "limits": [1500000, 6000000]
+    },
+    {
+        "name": "Genome_size_10x",
+        "id": "assemblatron.bin_length_at_10x",
+        "limits": [1500000, 6000000],
+        "xaxis": "x"
+    },
+    {
+        "name": "G_size_difference_1x_10",
+        "id": "ssi_stamper.assemblatron:1x10xsizediff_text",
+        "limits": [0, 260000]
+    },
+    {
+        "name": "Avg_coverage",
+        "id": "assemblatron.bin_coverage_at_1x",
+        "limits": [0, 200]
+    },
+    {
+        "name": "Contig_num_1x",
+        "id": "assemblatron.bin_contigs_at_1x",
+        "limits": [0, 700]
+    },
+    {
+        "name": "Num_reads",
+        "id": "assemblatron.filtered_reads_num",
+        "limits": [1000, 8000000]
+    },
+    {
+        "name": "Main_sp_plus_unclassified",
+        "id": "ssi_stamper.whats_my_species:minspecies_text",
+        "limits": [0.75, 1]
+    },
+    {
+        "name": "Unclassified_reads",
+        "id": "whats_my_species.percent_unclassified",
+        "limits": [0, 0.25]
+    }
+]
