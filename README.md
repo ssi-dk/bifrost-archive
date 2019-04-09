@@ -1,8 +1,8 @@
 # bifrost
 
 ![](docs/_media/usage.gif)
-![](docs/_media/filter.png)
-![](docs/_media/graph.png)
+![](docs/_media/screeenshot-filter.png)
+![](docs/_media/screeenshot-plot.png)
 ![](docs/_media/run_checker.png)
 
 ## Installing bifrost
