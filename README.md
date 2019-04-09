@@ -1,8 +1,15 @@
 # bifrost
 
+### User interface
 ![](docs/_media/usage.gif)
+
+### Filter
 ![](docs/_media/screenshot-filter.png)
+
+### Run plot
 ![](docs/_media/screenshot-plot.png)
+
+### Run status checker
 ![](docs/_media/run_checker.png)
 
 ## Installing bifrost
